@@ -19,7 +19,7 @@ html, body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    height: 100dvh; /* dynamic viewport height for mobile */
+    height: 100dvh;
     width: 100vw;
     color: #fff;
     touch-action: none; /* prevent browser gestures */
@@ -37,6 +37,7 @@ html, body {
 
 #game-container {
     position: relative;
+    flex-shrink: 0;
     width: 800px;
     height: 600px;
     background: #0d0d2b;
@@ -47,13 +48,14 @@ html, body {
     transform-origin: center center;
 }
 
-canvas {
+#gameCanvas {
     display: block;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 1;
 }
 
 /* ============================================

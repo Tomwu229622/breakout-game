@@ -589,11 +589,6 @@ class BreakoutGame {
         this.updateHighScoreDisplay();
         this.generateLevelButtons();
 
-        // Ensure orientation is not locked (allow portrait on mobile)
-        if (screen.orientation && typeof screen.orientation.unlock === 'function') {
-            screen.orientation.unlock().catch(() => {});
-        }
-
         // Start game loop
         this.lastTime = 0;
         this.animFrame = requestAnimationFrame((t) => this.gameLoop(t));
@@ -762,11 +757,14 @@ class BreakoutGame {
     // Convert screen coordinates to game canvas coordinates
     screenToGame(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) {
+            return { x: CANVAS_W / 2, y: CANVAS_H / 2 };
+        }
         const rx = clientX - rect.left;
         const ry = clientY - rect.top;
         return {
-            x: rx * (CANVAS_W / rect.width),
-            y: ry * (CANVAS_H / rect.height)
+            x: Math.max(0, Math.min(CANVAS_W, rx * (CANVAS_W / rect.width))),
+            y: Math.max(0, Math.min(CANVAS_H, ry * (CANVAS_H / rect.height)))
         };
     }
 
