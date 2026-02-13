@@ -590,6 +590,11 @@ class BreakoutGame {
         this.updateHighScoreDisplay();
         this.generateLevelButtons();
 
+        // Ensure orientation is not locked (allow portrait on mobile)
+        if (screen.orientation && typeof screen.orientation.unlock === 'function') {
+            screen.orientation.unlock().catch(() => {});
+        }
+
         // Start game loop
         this.lastTime = 0;
         this.animFrame = requestAnimationFrame((t) => this.gameLoop(t));
@@ -717,12 +722,12 @@ class BreakoutGame {
             setTimeout(() => this.resizeGame(), 200);
         });
 
-        // Fullscreen on double tap (mobile)
+        // Fullscreen on double tap (mobile) - only in landscape to avoid forcing orientation
         if (this.isMobile) {
             let lastTap = 0;
             this.container.addEventListener('touchend', (e) => {
                 const now = Date.now();
-                if (now - lastTap < 300 && this.state === 'menu') {
+                if (now - lastTap < 300 && this.state === 'menu' && !this.isPortrait) {
                     this.requestFullscreen();
                 }
                 lastTap = now;
