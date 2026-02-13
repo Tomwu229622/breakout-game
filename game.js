@@ -527,6 +527,7 @@ class BreakoutGame {
         this.canvas.width = CANVAS_W;
         this.canvas.height = CANVAS_H;
 
+        this.wrapper = document.getElementById('game-wrapper');
         this.container = document.getElementById('game-container');
         this.audio = new AudioEngine();
         this.particles = new ParticleSystem();
@@ -645,8 +646,8 @@ class BreakoutGame {
         });
 
         this.canvas.addEventListener('mousemove', (e) => {
-            const rect = this.canvas.getBoundingClientRect();
-            this.mouseX = (e.clientX - rect.left) * (CANVAS_W / rect.width);
+            const coords = this.screenToGame(e.clientX, e.clientY);
+            this.mouseX = coords.x;
             this.useMouseControl = true;
         });
 
@@ -660,16 +661,16 @@ class BreakoutGame {
         // Touch support
         this.canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
-            const rect = this.canvas.getBoundingClientRect();
-            this.mouseX = (e.touches[0].clientX - rect.left) * (CANVAS_W / rect.width);
+            const coords = this.screenToGame(e.touches[0].clientX, e.touches[0].clientY);
+            this.mouseX = coords.x;
             this.useMouseControl = true;
         }, { passive: false });
 
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.audio.init();
-            const rect = this.canvas.getBoundingClientRect();
-            this.mouseX = (e.touches[0].clientX - rect.left) * (CANVAS_W / rect.width);
+            const coords = this.screenToGame(e.touches[0].clientX, e.touches[0].clientY);
+            this.mouseX = coords.x;
             this.useMouseControl = true;
             if (this.state === 'playing' && this.ballAttached) {
                 this.launchBall();
@@ -733,20 +734,26 @@ class BreakoutGame {
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
-        // Calculate scale to fit while maintaining 4:3 aspect ratio (800x600)
-        const scaleX = vw / 800;
-        const scaleY = vh / 600;
-        this.scale = Math.min(scaleX, scaleY);
+        this.isPortrait = vh > vw;
 
-        // On small screens, fill 100%; on desktop, cap at 1x
-        const maxScale = this.isMobile ? Infinity : 1.2;
-        this.scale = Math.min(this.scale, maxScale);
+        if (this.isPortrait && this.isMobile) {
+            // Portrait: rotate -90deg so game (800x600) becomes 600x800, fill screen
+            const scaleX = vw / 600;
+            const scaleY = vh / 800;
+            this.scale = Math.min(scaleX, scaleY);
+            this.container.style.transform = `translate(-50%,-50%) scale(${this.scale}) rotate(-90deg)`;
+        } else {
+            // Landscape: fit 800x600
+            const scaleX = vw / 800;
+            const scaleY = vh / 600;
+            this.scale = Math.min(scaleX, scaleY);
+            const maxScale = this.isMobile ? Infinity : 1.2;
+            this.scale = Math.min(this.scale, maxScale);
+            this.container.style.transform = `translate(-50%,-50%) scale(${this.scale})`;
+        }
 
-        // Apply CSS transform to container
-        this.container.style.transform = `scale(${this.scale})`;
         this.container.style.transformOrigin = 'center center';
 
-        // On mobile, remove border-radius when near-fullscreen
         if (this.scale >= 0.95 && this.isMobile) {
             this.container.style.borderRadius = '0';
             this.container.style.boxShadow = 'none';
@@ -754,6 +761,27 @@ class BreakoutGame {
             this.container.style.borderRadius = '12px';
             this.container.style.boxShadow = '0 0 40px rgba(0,150,255,0.3), 0 0 80px rgba(0,100,200,0.1)';
         }
+    }
+
+    // Convert screen coordinates to game canvas coordinates (handles portrait rotation)
+    screenToGame(clientX, clientY) {
+        const rect = this.canvas.getBoundingClientRect();
+        const rx = clientX - rect.left;
+        const ry = clientY - rect.top;
+
+        if (this.isPortrait && this.isMobile) {
+            // rotate(-90deg): game X maps to screen Y, game Y maps to screen X
+            const gameX = CANVAS_W * (1 - ry / rect.height);
+            const gameY = CANVAS_H * (rx / rect.width);
+            return {
+                x: Math.max(0, Math.min(CANVAS_W, gameX)),
+                y: Math.max(0, Math.min(CANVAS_H, gameY))
+            };
+        }
+        return {
+            x: rx * (CANVAS_W / rect.width),
+            y: ry * (CANVAS_H / rect.height)
+        };
     }
 
     requestFullscreen() {
@@ -1593,7 +1621,8 @@ class BreakoutGame {
             ctx.fillStyle = 'rgba(255,255,255,0.5)';
             ctx.font = '14px "Noto Sans TC", sans-serif';
             ctx.textAlign = 'center';
-            const launchHint = this.isMobile ? '👆 點擊螢幕發射' : '點擊或按空白鍵發射';
+            let launchHint = this.isMobile ? '👆 點擊螢幕發射' : '點擊或按空白鍵發射';
+            if (this.isPortrait && this.isMobile) launchHint += '（上下滑動控制擋板）';
             ctx.fillText(launchHint, CANVAS_W / 2, PADDLE_Y - 30);
         }
     }
