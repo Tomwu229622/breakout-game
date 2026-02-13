@@ -527,7 +527,6 @@ class BreakoutGame {
         this.canvas.width = CANVAS_W;
         this.canvas.height = CANVAS_H;
 
-        this.wrapper = document.getElementById('game-wrapper');
         this.container = document.getElementById('game-container');
         this.audio = new AudioEngine();
         this.particles = new ParticleSystem();
@@ -741,13 +740,13 @@ class BreakoutGame {
 
         this.isPortrait = vh > vw;
 
-        // Always scale to fit 800x600 - no rotation, content stays upright
+        // Scale to fit 800x600 - no rotation, content stays upright
         const scaleX = vw / 800;
         const scaleY = vh / 600;
         this.scale = Math.min(scaleX, scaleY);
         const maxScale = this.isMobile ? Infinity : 1.2;
         this.scale = Math.min(this.scale, maxScale);
-        this.container.style.transform = `translate(-50%,-50%) scale(${this.scale})`;
+        this.container.style.transform = `scale(${this.scale})`;
 
         this.container.style.transformOrigin = 'center center';
 
