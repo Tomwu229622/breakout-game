@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="screen-orientation" content="landscape">
+    <meta name="screen-orientation" content="any">
     <title>Breakout - 打磚塊</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,6 +24,7 @@
             <div class="high-score-display">
                 <span>最高分: <span id="high-score-value">0</span></span>
             </div>
+            <p class="portrait-tip">💡 旋轉至橫向可獲更大畫面</p>
         </div>
 
         <!-- Level Select Screen -->
@@ -52,7 +53,7 @@
                     <h3>📱 手機 / 平板操控</h3>
                     <div class="instruction-item">
                         <span class="key">👆 滑動</span>
-                        <span>手指在螢幕上左右滑動控制擋板</span>
+                        <span>手指在螢幕上左右滑動控制擋板（直立與橫向皆可）</span>
                     </div>
                     <div class="instruction-item">
                         <span class="key">👆 點擊</span>
@@ -129,15 +130,6 @@
             <p id="level-score"></p>
             <p id="level-bonus"></p>
             <button id="btn-next-level" class="menu-btn">下一關</button>
-        </div>
-    </div>
-
-    <!-- Orientation Warning (Portrait on mobile) -->
-    <div id="orientation-warning">
-        <div class="orientation-content">
-            <div class="rotate-icon">📱↻</div>
-            <p>請將裝置轉為橫向以獲得最佳體驗</p>
-            <p class="small">Rotate your device to landscape</p>
         </div>
     </div>
 
