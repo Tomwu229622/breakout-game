@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="screen-orientation" content="landscape">
+    <title>Breakout - 打磚塊</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1 class="game-title">BREAKOUT</h1>
+            <p class="subtitle">打 磚 塊</p>
+            <div class="menu-buttons">
+                <button id="btn-start" class="menu-btn">開始遊戲</button>
+                <button id="btn-level-select" class="menu-btn">關卡選擇</button>
+                <button id="btn-how-to-play" class="menu-btn secondary">遊戲說明</button>
+            </div>
+            <div class="high-score-display">
+                <span>最高分: <span id="high-score-value">0</span></span>
+            </div>
+        </div>
+
+        <!-- Level Select Screen -->
+        <div id="level-select-screen" class="screen hidden">
+            <h2>選擇關卡</h2>
+            <div id="level-grid" class="level-grid"></div>
+            <button id="btn-back-menu" class="menu-btn secondary">返回主選單</button>
+        </div>
+
+        <!-- How to Play Screen -->
+        <div id="how-to-play-screen" class="screen hidden">
+            <h2>遊戲說明</h2>
+            <div class="instructions">
+                <div class="control-section desktop-controls">
+                    <h3>🖥️ 電腦操控</h3>
+                    <div class="instruction-item">
+                        <span class="key">← →</span>
+                        <span>方向鍵或滑鼠移動擋板</span>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="key">Space</span>
+                        <span>發射球 / 暫停遊戲</span>
+                    </div>
+                </div>
+                <div class="control-section mobile-controls">
+                    <h3>📱 手機 / 平板操控</h3>
+                    <div class="instruction-item">
+                        <span class="key">👆 滑動</span>
+                        <span>手指在螢幕上左右滑動控制擋板</span>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="key">👆 點擊</span>
+                        <span>點擊螢幕發射球</span>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="key">⏸️</span>
+                        <span>點擊右上角暫停按鈕</span>
+                    </div>
+                </div>
+                <div class="brick-legend">
+                    <h3>磚塊類型</h3>
+                    <div class="legend-item"><span class="brick-sample normal"></span> 普通磚 - 一擊即碎</div>
+                    <div class="legend-item"><span class="brick-sample iron"></span> 鐵磚 - 需要多次擊打</div>
+                    <div class="legend-item"><span class="brick-sample explosive"></span> 爆炸磚 - 連鎖炸周圍</div>
+                    <div class="legend-item"><span class="brick-sample multi"></span> 多球磚 - 分裂出多顆球</div>
+                    <div class="legend-item"><span class="brick-sample hidden-b"></span> 隱形磚 - 擊中才顯示</div>
+                    <div class="legend-item"><span class="brick-sample moving"></span> 移動磚 - 會左右移動</div>
+                </div>
+                <div class="powerup-legend">
+                    <h3>道具效果</h3>
+                    <div class="legend-item">🟢 板子變長</div>
+                    <div class="legend-item">🔴 板子變短（陷阱）</div>
+                    <div class="legend-item">🔵 球變慢</div>
+                    <div class="legend-item">🟡 穿透球</div>
+                    <div class="legend-item">🟣 磁力吸球</div>
+                    <div class="legend-item">⚡ 雷射射擊</div>
+                    <div class="legend-item">💥 分裂多球</div>
+                    <div class="legend-item">❤️ 額外生命</div>
+                </div>
+            </div>
+            <button id="btn-back-menu2" class="menu-btn secondary">返回主選單</button>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- HUD -->
+        <div id="hud" class="hidden">
+            <div class="hud-left">
+                <span id="hud-lives"></span>
+                <span id="hud-score">分數: 0</span>
+            </div>
+            <div class="hud-center">
+                <span id="hud-level">第 1 關</span>
+                <span id="hud-combo" class="combo-text"></span>
+            </div>
+            <div class="hud-right">
+                <span id="hud-powerup"></span>
+                <button id="btn-pause-mobile" class="pause-btn-mobile">⏸</button>
+            </div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div id="pause-overlay" class="overlay hidden">
+            <h2>暫停</h2>
+            <button id="btn-resume" class="menu-btn">繼續遊戲</button>
+            <button id="btn-restart" class="menu-btn secondary">重新開始</button>
+            <button id="btn-quit" class="menu-btn secondary">回主選單</button>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="gameover-overlay" class="overlay hidden">
+            <h2 id="gameover-title">遊戲結束</h2>
+            <p id="gameover-score"></p>
+            <p id="gameover-high"></p>
+            <button id="btn-retry" class="menu-btn">再玩一次</button>
+            <button id="btn-gameover-quit" class="menu-btn secondary">回主選單</button>
+        </div>
+
+        <!-- Level Complete Overlay -->
+        <div id="level-complete-overlay" class="overlay hidden">
+            <h2>過關！</h2>
+            <p id="level-score"></p>
+            <p id="level-bonus"></p>
+            <button id="btn-next-level" class="menu-btn">下一關</button>
+        </div>
+    </div>
+
+    <!-- Orientation Warning (Portrait on mobile) -->
+    <div id="orientation-warning">
+        <div class="orientation-content">
+            <div class="rotate-icon">📱↻</div>
+            <p>請將裝置轉為橫向以獲得最佳體驗</p>
+            <p class="small">Rotate your device to landscape</p>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

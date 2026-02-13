@@ -1,0 +1,712 @@
+/* ============================================
+   BREAKOUT - 打磚塊 Styles
+   Full Responsive Design: Desktop / Tablet / Mobile
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    background: #0a0a1a;
+    overflow: hidden;
+    font-family: 'Noto Sans TC', 'Orbitron', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    height: 100dvh; /* dynamic viewport height for mobile */
+    width: 100vw;
+    color: #fff;
+    touch-action: none; /* prevent browser gestures */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* ============================================
+   GAME CONTAINER - Responsive Scaling
+   ============================================ */
+
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background: #0d0d2b;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0, 150, 255, 0.3), 0 0 80px rgba(0, 100, 200, 0.1);
+    /* Will be scaled dynamically by JS */
+    transform-origin: center center;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================
+   SCREENS
+   ============================================ */
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    background: linear-gradient(135deg, #0d0d2b 0%, #1a1a4e 50%, #0d0d2b 100%);
+    padding: 20px;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+.game-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    background: linear-gradient(180deg, #00d4ff, #0066ff, #9933ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 20px rgba(0, 150, 255, 0.5));
+    letter-spacing: 8px;
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 150, 255, 0.5)); }
+    50% { filter: drop-shadow(0 0 40px rgba(0, 150, 255, 0.8)); }
+}
+
+.subtitle {
+    font-size: 24px;
+    color: #8888cc;
+    margin-top: 8px;
+    letter-spacing: 16px;
+    margin-bottom: 40px;
+}
+
+/* Buttons */
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.menu-btn {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 48px;
+    border: 2px solid #00d4ff;
+    background: linear-gradient(135deg, rgba(0, 100, 255, 0.2), rgba(0, 200, 255, 0.1));
+    color: #00d4ff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 220px;
+    letter-spacing: 2px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 100, 255, 0.4), rgba(0, 200, 255, 0.3));
+    box-shadow: 0 0 20px rgba(0, 150, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.menu-btn:active {
+    transform: translateY(0);
+    background: linear-gradient(135deg, rgba(0, 100, 255, 0.5), rgba(0, 200, 255, 0.4));
+}
+
+.menu-btn.secondary {
+    border-color: #555;
+    color: #aaa;
+    background: rgba(50, 50, 80, 0.3);
+}
+
+.menu-btn.secondary:hover {
+    border-color: #888;
+    color: #ddd;
+    background: rgba(80, 80, 120, 0.4);
+    box-shadow: 0 0 10px rgba(100, 100, 200, 0.3);
+}
+
+.high-score-display {
+    color: #ffcc00;
+    font-size: 16px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Level Select */
+
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+    max-width: 500px;
+}
+
+.level-btn {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #333;
+    background: rgba(30, 30, 60, 0.5);
+    color: #aaa;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.level-btn.unlocked {
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.level-btn.unlocked:hover {
+    background: rgba(0, 100, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.level-btn.completed {
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+.level-btn .stars {
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+.level-btn.locked {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* How to Play */
+
+.instructions {
+    max-width: 600px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 20px;
+    text-align: left;
+}
+
+.control-section {
+    margin-bottom: 16px;
+}
+
+.control-section h3 {
+    color: #00d4ff;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.instruction-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.key {
+    background: rgba(0, 100, 255, 0.3);
+    border: 1px solid #00d4ff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    min-width: 70px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.brick-legend, .powerup-legend {
+    margin-top: 16px;
+}
+
+.brick-legend h3, .powerup-legend h3 {
+    color: #00d4ff;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #ccc;
+}
+
+.brick-sample {
+    width: 40px;
+    height: 16px;
+    border-radius: 3px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.brick-sample.normal { background: linear-gradient(180deg, #ff6b6b, #c0392b); }
+.brick-sample.iron { background: linear-gradient(180deg, #95a5a6, #7f8c8d); border: 1px solid #bdc3c7; }
+.brick-sample.explosive { background: linear-gradient(180deg, #f39c12, #e74c3c); }
+.brick-sample.multi { background: linear-gradient(180deg, #9b59b6, #8e44ad); }
+.brick-sample.hidden-b { background: rgba(255, 255, 255, 0.1); border: 1px dashed #555; }
+.brick-sample.moving { background: linear-gradient(180deg, #1abc9c, #16a085); }
+
+/* ============================================
+   HUD
+   ============================================ */
+
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 5;
+    font-size: 14px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+#hud.hidden {
+    display: none;
+}
+
+.hud-left, .hud-center, .hud-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#hud-score {
+    color: #ffcc00;
+}
+
+#hud-level {
+    color: #00d4ff;
+}
+
+.combo-text {
+    color: #ff6b6b;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+#hud-powerup {
+    font-size: 12px;
+    color: #00ff88;
+}
+
+/* Mobile Pause Button */
+.pause-btn-mobile {
+    display: none; /* hidden on desktop, shown on mobile */
+    width: 32px;
+    height: 28px;
+    border: 1px solid #555;
+    background: rgba(50, 50, 80, 0.5);
+    color: #aaa;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1;
+    padding: 0;
+}
+
+.pause-btn-mobile:active {
+    background: rgba(80, 80, 120, 0.6);
+    color: #fff;
+}
+
+/* ============================================
+   OVERLAYS
+   ============================================ */
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 20;
+    gap: 16px;
+    padding: 20px;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 42px;
+    margin-bottom: 10px;
+    color: #00d4ff;
+}
+
+.overlay p {
+    font-size: 18px;
+    color: #ccc;
+    text-align: center;
+}
+
+/* ============================================
+   ORIENTATION WARNING
+   ============================================ */
+
+#orientation-warning {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #0a0a1a;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.orientation-content {
+    text-align: center;
+    padding: 40px;
+}
+
+.rotate-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    animation: rotateHint 2s ease-in-out infinite;
+}
+
+@keyframes rotateHint {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(90deg); }
+}
+
+.orientation-content p {
+    color: #8888cc;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.orientation-content p.small {
+    font-size: 14px;
+    color: #555;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 150, 255, 0.4);
+    border-radius: 3px;
+}
+
+/* ============================================
+   RESPONSIVE: TABLET (max-width 900px)
+   ============================================ */
+
+@media (max-width: 900px) {
+    #game-container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .game-title {
+        font-size: 52px;
+        letter-spacing: 4px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        letter-spacing: 10px;
+        margin-bottom: 24px;
+    }
+
+    .menu-btn {
+        font-size: 16px;
+        padding: 12px 36px;
+        min-width: 200px;
+    }
+
+    .overlay h2 {
+        font-size: 32px;
+    }
+
+    .overlay p {
+        font-size: 15px;
+    }
+
+    .level-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 16px;
+    }
+
+    .level-grid {
+        gap: 8px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE: MOBILE (max-width 600px)
+   ============================================ */
+
+@media (max-width: 600px) {
+    .game-title {
+        font-size: 36px;
+        letter-spacing: 3px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        letter-spacing: 8px;
+        margin-bottom: 20px;
+    }
+
+    .menu-buttons {
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .menu-btn {
+        font-size: 14px;
+        padding: 10px 28px;
+        min-width: 180px;
+    }
+
+    .high-score-display {
+        font-size: 13px;
+    }
+
+    .overlay h2 {
+        font-size: 26px;
+    }
+
+    .overlay p {
+        font-size: 13px;
+    }
+
+    .overlay .menu-btn {
+        font-size: 14px;
+        padding: 10px 24px;
+    }
+
+    #hud {
+        font-size: 10px;
+        height: 30px;
+        padding: 0 8px;
+    }
+
+    .hud-left, .hud-center, .hud-right {
+        gap: 6px;
+    }
+
+    .pause-btn-mobile {
+        display: block;
+    }
+
+    .level-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 14px;
+    }
+
+    .level-grid {
+        gap: 6px;
+        max-width: 320px;
+    }
+
+    .instructions {
+        max-height: 300px;
+        padding: 12px;
+    }
+
+    .instruction-item {
+        font-size: 12px;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    .key {
+        font-size: 10px;
+        padding: 4px 8px;
+        min-width: 55px;
+    }
+
+    .brick-legend h3, .powerup-legend h3 {
+        font-size: 13px;
+    }
+
+    .legend-item {
+        font-size: 11px;
+    }
+
+    .brick-sample {
+        width: 30px;
+        height: 12px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE: MOBILE LANDSCAPE
+   ============================================ */
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .game-title {
+        font-size: 32px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .menu-buttons {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .menu-btn {
+        font-size: 13px;
+        padding: 8px 20px;
+        min-width: auto;
+    }
+
+    .overlay h2 {
+        font-size: 24px;
+        margin-bottom: 4px;
+    }
+
+    .overlay {
+        gap: 8px;
+    }
+
+    .pause-btn-mobile {
+        display: block;
+    }
+}
+
+/* ============================================
+   PORTRAIT MODE WARNING (Mobile Only)
+   ============================================ */
+
+@media (max-width: 600px) and (orientation: portrait) {
+    #orientation-warning {
+        display: flex;
+    }
+}
+
+/* ============================================
+   TOUCH DEVICE ENHANCEMENTS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Touch devices: bigger tap targets */
+    .menu-btn {
+        padding: 14px 36px;
+        min-height: 48px;
+    }
+
+    .menu-btn:hover {
+        /* Remove hover effects on touch */
+        transform: none;
+        box-shadow: none;
+    }
+
+    .level-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .pause-btn-mobile {
+        display: block;
+        width: 36px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    /* Hide desktop-only controls in instructions */
+    .desktop-controls {
+        display: none;
+    }
+}
+
+/* Show desktop controls, hide mobile on non-touch */
+@media (hover: hover) and (pointer: fine) {
+    .mobile-controls {
+        display: none;
+    }
+}
+
+/* ============================================
+   SAFE AREA (Notch / Dynamic Island)
+   ============================================ */
+
+@supports (padding: env(safe-area-inset-top)) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+}
