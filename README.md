@@ -1,5 +1,91 @@
 # Breakout 打磚塊
 
-HTML5 Canvas Breakout game with 15 levels, special bricks, power-ups, and responsive design.
+HTML5 Canvas 打磚塊遊戲，支援 15 關、特殊磚塊、道具系統，並具備完整響應式設計。
 
-🎮 **Play now:** https://breakout-game-lemon.vercel.app
+🎮 **立即遊玩：** [https://breakout-game-lemon.vercel.app](https://breakout-game-lemon.vercel.app)
+
+---
+
+## 功能特色
+
+### 遊戲機制
+- **15 個關卡**：難度漸進，從初入磚陣到最終決戰
+- **連擊系統**：連續擊破磚塊獲得加分
+- **關卡選擇**：依進度解鎖，可自由選擇已解鎖關卡
+- **最高分記錄**：自動儲存於瀏覽器
+
+### 磚塊類型
+| 類型 | 說明 |
+|------|------|
+| 普通磚 | 一擊即碎 |
+| 鐵磚 | 需多次擊打 |
+| 爆炸磚 | 擊中後連鎖炸周圍磚塊 |
+| 多球磚 | 擊破後分裂出多顆球 |
+| 隱形磚 | 擊中後才顯示 |
+| 移動磚 | 會左右移動 |
+
+### 道具效果
+🟢 板子變長 | 🔴 板子縮短 | 🔵 球速減慢 | 🟡 穿透球  
+🟣 磁力吸球 | ⚡ 雷射射擊 | 💥 分裂多球 | ❤️ 額外生命
+
+---
+
+## 操作方式
+
+### 電腦
+- **擋板**：方向鍵 ← → 或 A / D
+- **發球 / 暫停**：空白鍵
+- **暫停**：Esc
+
+### 手機 / 平板
+- **橫向模式**：左右滑動控制擋板
+- **直立模式**：上下滑動控制擋板
+- **發球**：點擊螢幕
+- **暫停**：點擊右上角 ⏸ 按鈕
+
+---
+
+## 技術架構
+
+- **HTML5 Canvas**：遊戲繪圖
+- **原生 JavaScript**：遊戲邏輯
+- **CSS3**：響應式版面與動畫
+- **Web Audio API**：音效
+
+### 響應式設計
+- 桌面、平板、手機皆可遊玩
+- 支援直立與橫向模式
+- 直立模式下遊戲會旋轉填滿螢幕
+
+---
+
+## 本地執行
+
+1. 複製專案：
+   ```bash
+   git clone https://github.com/Tomwu229622/breakout-game.git
+   cd breakout-game
+   ```
+
+2. 以本地伺服器開啟（建議）：
+   ```bash
+   # 使用 Python
+   python -m http.server 8000
+
+   # 或使用 Node.js
+   npx serve .
+   ```
+
+3. 在瀏覽器開啟 `http://localhost:8000`
+
+---
+
+## 部署
+
+本專案可部署至 [Vercel](https://vercel.com)，連線 GitHub 儲存庫即可自動部署。
+
+---
+
+## 授權
+
+MIT License

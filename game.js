@@ -722,12 +722,12 @@ class BreakoutGame {
             setTimeout(() => this.resizeGame(), 200);
         });
 
-        // Fullscreen on double tap (mobile) - only in landscape to avoid forcing orientation
+        // Fullscreen on double tap (mobile)
         if (this.isMobile) {
             let lastTap = 0;
             this.container.addEventListener('touchend', (e) => {
                 const now = Date.now();
-                if (now - lastTap < 300 && this.state === 'menu' && !this.isPortrait) {
+                if (now - lastTap < 300 && this.state === 'menu') {
                     this.requestFullscreen();
                 }
                 lastTap = now;
@@ -741,21 +741,13 @@ class BreakoutGame {
 
         this.isPortrait = vh > vw;
 
-        if (this.isPortrait && this.isMobile) {
-            // Portrait: rotate -90deg so game (800x600) becomes 600x800, fill screen
-            const scaleX = vw / 600;
-            const scaleY = vh / 800;
-            this.scale = Math.min(scaleX, scaleY);
-            this.container.style.transform = `translate(-50%,-50%) scale(${this.scale}) rotate(-90deg)`;
-        } else {
-            // Landscape: fit 800x600
-            const scaleX = vw / 800;
-            const scaleY = vh / 600;
-            this.scale = Math.min(scaleX, scaleY);
-            const maxScale = this.isMobile ? Infinity : 1.2;
-            this.scale = Math.min(this.scale, maxScale);
-            this.container.style.transform = `translate(-50%,-50%) scale(${this.scale})`;
-        }
+        // Always scale to fit 800x600 - no rotation, content stays upright
+        const scaleX = vw / 800;
+        const scaleY = vh / 600;
+        this.scale = Math.min(scaleX, scaleY);
+        const maxScale = this.isMobile ? Infinity : 1.2;
+        this.scale = Math.min(this.scale, maxScale);
+        this.container.style.transform = `translate(-50%,-50%) scale(${this.scale})`;
 
         this.container.style.transformOrigin = 'center center';
 
@@ -768,21 +760,11 @@ class BreakoutGame {
         }
     }
 
-    // Convert screen coordinates to game canvas coordinates (handles portrait rotation)
+    // Convert screen coordinates to game canvas coordinates
     screenToGame(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();
         const rx = clientX - rect.left;
         const ry = clientY - rect.top;
-
-        if (this.isPortrait && this.isMobile) {
-            // rotate(-90deg): game X maps to screen Y, game Y maps to screen X
-            const gameX = CANVAS_W * (1 - ry / rect.height);
-            const gameY = CANVAS_H * (rx / rect.width);
-            return {
-                x: Math.max(0, Math.min(CANVAS_W, gameX)),
-                y: Math.max(0, Math.min(CANVAS_H, gameY))
-            };
-        }
         return {
             x: rx * (CANVAS_W / rect.width),
             y: ry * (CANVAS_H / rect.height)
@@ -1626,8 +1608,7 @@ class BreakoutGame {
             ctx.fillStyle = 'rgba(255,255,255,0.5)';
             ctx.font = '14px "Noto Sans TC", sans-serif';
             ctx.textAlign = 'center';
-            let launchHint = this.isMobile ? '👆 點擊螢幕發射' : '點擊或按空白鍵發射';
-            if (this.isPortrait && this.isMobile) launchHint += '（上下滑動控制擋板）';
+            const launchHint = this.isMobile ? '👆 點擊螢幕發射' : '點擊或按空白鍵發射';
             ctx.fillText(launchHint, CANVAS_W / 2, PADDLE_Y - 30);
         }
     }
